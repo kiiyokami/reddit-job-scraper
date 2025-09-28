@@ -8,6 +8,6 @@ This project was created using `bun init` in bun v1.2.22. [Bun](https://bun.com)
 - [x] Configure Discord Webhook
 - [x] Configure Reddit Subreddits
 - [x] Configure Keywords
-- [] Deploy to AWS Lambda and Create EventBridge Schedule
+- [ ] Deploy to AWS Lambda and Create EventBridge Schedule
 
  
