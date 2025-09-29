@@ -11,12 +11,6 @@ export const runScript = async () => {
   }
 }
 
-runScript();
-
-// exports.handler = async (event: any) => {
-//   runScript();
-//   return 'Successfully sent to discord webhook';
-// };
 
 
 

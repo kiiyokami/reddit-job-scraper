@@ -1,5 +1,5 @@
 {
     "subreddits": ["virtualassistantph", "phjobs", "buhaydigital", "phclassifieds", "phcareers"],
     "title_keywords": ["hiring", "looking", "offer"],
-    "description_keywords": ["social media","backend", "frontend", "full-stack", "fullstack", "software engineer", "engineer", "developer", "web developer", "web developer", "software", "engineering", "development", "dev", "devops"]
+    "description_keywords": ["backend", "frontend", "full-stack", "fullstack", "software engineer", "engineer", "developer", "web developer", "web developer", "software", "engineering", "development", "dev", "devops"]
 }
