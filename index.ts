@@ -1,5 +1,4 @@
-const { runScript } = require("./src/script");
-
+import { runScript } from "./src/script";
 
 export const handler = async () => {
     await runScript();
@@ -12,3 +11,4 @@ export const handler = async () => {
 };
 
 handler();
+
