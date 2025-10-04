@@ -4,6 +4,24 @@ import { parser } from "./json-handler";
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+const fetchWithTimeout = async (url: string, headers: any, timeoutMs = 5000) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+    
+    try {
+        const response = await axios.get(url, {
+            headers,
+            signal: controller.signal,
+            timeout: timeoutMs
+        });
+        clearTimeout(timeoutId);
+        return response;
+    } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+    }
+};
+
 export const batchFetcher = async (token: string) => {
     console.log('Starting batchFetcher with subreddits:', data.subreddits);
     
@@ -20,32 +38,17 @@ export const batchFetcher = async (token: string) => {
         
         console.log(`Processing thread ${i + 1}/${data.subreddits.length}: ${thread}`);
         
-        let success = false;
-        for (let attempt = 1; attempt <= 2; attempt++) {
-            try {
-                const response = await axios.get(`https://oauth.reddit.com/r/${thread}/new.json?limit=25`, { 
-                    headers, 
-                    timeout: 8000 
-                });
-                const parsed = parser(response.data);
-                console.log(`Successfully fetched ${parsed.length} posts from ${thread}`);
-                responses.push(parsed);
-                success = true;
-                break;
-            } catch (error: any) {
-                console.log(`Attempt ${attempt} failed for ${thread}:`, error?.response?.status);
-                if (attempt === 2) {
-                    console.error(`Failed to fetch ${thread} after 2 attempts`);
-                    responses.push([]);
-                } else {
-                    await delay(2000);
-                }
-            }
+        try {
+            const response = await fetchWithTimeout(`https://oauth.reddit.com/r/${thread}/new.json?limit=25`, headers);
+            const parsed = parser(response.data);
+            console.log(`Successfully fetched ${parsed.length} posts from ${thread}`);
+            responses.push(parsed);
+        } catch (error: any) {
+            console.error(`Failed to fetch ${thread}:`, error.message);
+            responses.push([]);
         }
         
-        if (success && i < data.subreddits.length - 1) {
-            await delay(3000);
-        }
+        await delay(1000);
     }
     
     console.log(`Completed processing ${data.subreddits.length} subreddits`);
